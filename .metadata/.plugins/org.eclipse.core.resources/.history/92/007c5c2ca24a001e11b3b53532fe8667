@@ -1,0 +1,14 @@
+package com.alura.hotel.pruebas;
+
+import com.alura.hotel.jdbccontroler.ReservaControler;
+
+public class PruebaConsultaReserva {
+
+	public static void main(String[] args) {
+		ReservaControler reserva= new ReservaControler();
+		reserva.buscar();
+		
+	}
+
+	
+}

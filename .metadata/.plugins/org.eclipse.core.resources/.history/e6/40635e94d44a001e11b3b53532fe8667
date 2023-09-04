@@ -1,0 +1,63 @@
+package com.alura.hotel.jdbcdao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.ArrayList;
+
+import com.alura.hotel.jdbcmodelo.Reserva;
+
+public class ReservaDao {
+	final private Connection con;
+
+	public ReservaDao(Connection con) {
+		this.con = con;
+	}
+
+	public List<Reserva> buscar() {
+		List<Reserva> resultado = new ArrayList<>();
+		String sql = "Select idreserva,fechaentrada,fechasalida,valor,formapago from reservas";
+		try {
+			final PreparedStatement statement = con.prepareStatement(sql);
+			try (statement) {
+				statement.execute();
+				final ResultSet result = statement.getResultSet();
+				try (result) {
+					while (result.next()) {
+						resultado.add(new Reserva(result.getInt("idreserva"), result.getDate("fechaentrada"),
+								result.getDate("fechasalida"), result.getFloat("valor"),
+								result.getString("formapago")));
+					}
+				}
+			}
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		return resultado;
+
+	}
+
+	public void guardar(Reserva reserva) {
+		String sql = "insert into reservas(fechaentrada, fechasalida,valor, formapago) values(?,?,?,?)";
+		try {
+			PreparedStatement statement = con.prepareStatement(sql);
+			try (statement) {
+				statement.setDate(1, reserva.getFechaE());
+				statement.setDate(2, reserva.getFechaS());
+				statement.setFloat(3, reserva.getValor());
+				statement.setString(4, reserva.getFormaPago());
+				final ResultSet result = statement.getGeneratedKeys();
+				try (result) {
+				}
+
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+	}
+
+}

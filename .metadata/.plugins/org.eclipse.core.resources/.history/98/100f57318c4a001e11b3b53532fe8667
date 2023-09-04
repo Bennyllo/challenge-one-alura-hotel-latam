@@ -1,0 +1,11 @@
+package com.alura.hotel.jdbcmodelo;
+
+import java.sql.Date;
+
+public class Reserva {
+	private Integer id;
+	private Date fechaE;
+	private Date fechaS;
+	private String formaPago;
+
+}

@@ -1,0 +1,13 @@
+package com.alura.hotel.jdbcmodelo;
+
+import java.sql.Date;
+
+public class Huesped {
+	private Integer id;
+	private String nombre;
+	private String apellido;
+	private Date fechaNacimiento;
+	private Integer telefono;
+	private Integer reservaID;
+
+}

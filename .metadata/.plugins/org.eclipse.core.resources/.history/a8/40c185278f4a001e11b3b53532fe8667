@@ -1,0 +1,14 @@
+package com.alura.hotel.pruebas;
+
+import java.sql.Connection;
+
+import java.sql.SQLException;
+
+import com.alura.hotel.jdbcfactory.CreaConexion;
+
+public class PruebaConexion {
+	public static void main(String[] args) throws SQLException {
+		Connection con=new CreaConexion().recuperaConexion();
+		con.close();
+	}
+}

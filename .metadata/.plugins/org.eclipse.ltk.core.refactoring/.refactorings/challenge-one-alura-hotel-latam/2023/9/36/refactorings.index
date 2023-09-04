@@ -1,0 +1,8 @@
+1693699599712	Rename package 'pruebas'
+1693701914225	Rename package 'com.alura.hotel.oruebas'
+1693766856409	Rename package 'com.alura.hotel.modelo'
+1693768920015	Rename type 'CreaConexion'
+1693773238742	Rename type 'ConectionFactory'
+1693781577325	Encapsulate field 'nacionalidad'
+1693795512589	Rename local variable 'diaria'
+1693795524583	Rename local variable 'valor'

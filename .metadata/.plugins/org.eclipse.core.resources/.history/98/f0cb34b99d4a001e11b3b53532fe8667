@@ -1,0 +1,11 @@
+package com.alura.hotel.jdbcdao;
+
+import java.sql.Connection;
+
+public class ReservaDao {
+
+	public ReservaDao(Connection con) {
+		// TODO Auto-generated constructor stub
+	}
+
+}

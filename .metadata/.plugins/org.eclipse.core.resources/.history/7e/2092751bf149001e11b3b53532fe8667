@@ -1,0 +1,11 @@
+package com.alura.hotel.oruebas;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+public class PruebaConexion {
+	public static void main(String[] args) {
+		Connection con = new DriverManager.getConnection(
+				"jdbc:mysql://localhost/hotelDB?useTimeZone=true&serverTimeZone=UTC", "root", "Godines2$");
+	}
+}

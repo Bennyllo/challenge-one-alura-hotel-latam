@@ -1,0 +1,11 @@
+package com.alura.hotel.jdbccontroler;
+
+import com.alura.hotel.jdbcdao.ReservaDao;
+import com.alura.hotel.jdbcfactory.ConectionFactory;
+
+public class HuespedControler {
+private ReservaDao reservaDAO;
+	public HuespedControler() {
+		Connection conexion=new ConectionFactory().recuperaConexion();
+	}
+}

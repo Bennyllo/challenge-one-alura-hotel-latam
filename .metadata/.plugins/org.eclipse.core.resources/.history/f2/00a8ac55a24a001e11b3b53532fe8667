@@ -1,0 +1,22 @@
+package com.alura.hotel.pruebas;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.alura.hotel.jdbccontroler.ReservaControler;
+import com.alura.hotel.jdbcmodelo.Reserva;
+
+public class PruebaConsultaReserva {
+
+	public static void main(String[] args) {
+		List<Reserva> resultado= new ArrayList<>();
+		ReservaControler reserva= new ReservaControler();
+		reserva.buscar();
+		resultado.forEach((r)->{
+			System.out.println(r);
+		});
+		
+	}
+
+	
+}

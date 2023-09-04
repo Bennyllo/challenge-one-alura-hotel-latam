@@ -1,0 +1,41 @@
+package com.alura.hotel.jdbcdao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.alura.hotel.jdbcmodelo.Huesped;
+import com.alura.hotel.jdbcmodelo.Reserva;
+
+public class HuespedDao {
+	final private Connection con;
+
+	public HuespedDao(Connection con) {
+		this.con = con;
+	}
+
+	public List<Huesped> buscar() {
+		List<Huesped> resultado=new ArrayList<>();
+		String sql="Select id,nombre,apellido,fechanacimiento,nacionalidad,telefono,reserva_id from huespedes";
+		try {
+			final PreparedStatement statement=con.prepareStatement(sql);
+			try (statement){
+				statement.execute();
+				final ResultSet result=statement.getResultSet();
+				try(result){
+					while(result.next()) {
+						resultado.add(new Huesped(result.getInt("id"),result.getString("nombre"),result.getString("apellido"),result.getDate("fechanacimiento"),
+								result.getString("nacionalidad"),result.getInt("telefono"),result.getInt("reserva_id")));
+					}
+				}
+			}
+		}catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
+		return resultado;
+		
+	}
+}

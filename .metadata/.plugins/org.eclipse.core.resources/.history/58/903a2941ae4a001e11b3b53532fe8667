@@ -1,0 +1,94 @@
+package com.alura.hotel.jdbcmodelo;
+
+import java.sql.Date;
+
+public class Huesped {
+	private Integer id;
+	private String nombre;
+	private String apellido;
+	private Date fechaNacimiento;
+	private String nacionalidad;
+	private Long telefono;
+	private Integer reservaID;
+	
+
+	public Huesped( String nombre, String apellido, Date fechaNacimiento, String nacionalidad, Long telefono,
+			Integer reservaID) {
+		
+		this.nombre = nombre;
+		this.apellido = apellido;
+		this.fechaNacimiento = fechaNacimiento;
+		this.nacionalidad=nacionalidad;
+		this.telefono = telefono;
+		this.reservaID = reservaID;
+	}
+
+	public Huesped(Integer id, String nombre, String apellido, Date fechaNacimiento, String nacionalidad, _long telefono,
+			Integer reservaID) {
+		this.id=id;
+		this.nombre = nombre;
+		this.apellido = apellido;
+		this.fechaNacimiento = fechaNacimiento;
+		this.nacionalidad=nacionalidad;
+		this.telefono = telefono;
+		this.reservaID = reservaID;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getApellido() {
+		return apellido;
+	}
+
+	public void setApellido(String apellido) {
+		this.apellido = apellido;
+	}
+
+	public Date getFechaNacimiento() {
+		return fechaNacimiento;
+	}
+
+	public void setFechaNacimiento(Date fechaNacimiento) {
+		this.fechaNacimiento = fechaNacimiento;
+	}
+
+	public Integer getTelefono() {
+		return telefono;
+	}
+
+	public void setTelefono(Integer telefono) {
+		this.telefono = telefono;
+	}
+
+	public Integer getReservaID() {
+		return reservaID;
+	}
+
+	public void setReservaID(Integer reservaID) {
+		this.reservaID = reservaID;
+	}
+	
+	public String toString() {
+		return String.format("id:%d,nombre:%,apellido:s,fechanacimiento:%tf,nacionalidad:%s,telefono:%d,reserva_id:%d",
+				this.id,this.nombre,this.apellido,this.fechaNacimiento,this.nacionalidad,this.telefono,this.reservaID);
+	}
+
+	public String getNacionalidad() {
+		return nacionalidad;
+	}
+
+	public void setNacionalidad(String nacionalidad) {
+		this.nacionalidad = nacionalidad;
+	}
+
+}
