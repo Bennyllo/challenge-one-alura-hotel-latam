@@ -1,0 +1,17 @@
+package com.alura.hotel.pruebas;
+
+import java.sql.Connection;
+import java.sql.Date;
+
+import com.alura.hotel.jdbcdao.HuespedDao;
+import com.alura.hotel.jdbcfactory.ConexionFactory;
+import com.alura.hotel.jdbcmodelo.Huesped;
+
+public class PruebaGuardarHuesped {
+public static void main(String[] args) {
+	Date na=Date.valueOf("1999-02-10");
+	Huesped huesped= new Huesped("Jhon","cena",);
+	Connection con = new ConexionFactory().recuperaConexion();
+	HuespedDao huespedDAO=new HuespedDao(con);
+}
+}

@@ -1,0 +1,15 @@
+package com.alura.hotel.pruebas;
+
+import java.sql.Connection;
+
+import com.alura.hotel.jdbcdao.HuespedDao;
+import com.alura.hotel.jdbcfactory.ConexionFactory;
+import com.alura.hotel.jdbcmodelo.Huesped;
+
+public class PruebaGuardarHuesped {
+public static void main(String[] args) {
+	Huesped huesped= new Huesped();
+	Connection con = new ConexionFactory().recuperaConexion();
+	HuespedDao huespedDAO=new HuespedDao(con);
+}
+}

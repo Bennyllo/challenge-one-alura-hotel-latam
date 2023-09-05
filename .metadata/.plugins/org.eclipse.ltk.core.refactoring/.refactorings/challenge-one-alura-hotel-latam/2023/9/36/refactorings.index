@@ -6,3 +6,6 @@
 1693781577325	Encapsulate field 'nacionalidad'
 1693795512589	Rename local variable 'diaria'
 1693795524583	Rename local variable 'valor'
+1693890706840	Rename method 'eliminar'
+1693890818669	Rename local variable 'elimReserva'
+1693890837971	Rename local variable 'elimHuesped'
