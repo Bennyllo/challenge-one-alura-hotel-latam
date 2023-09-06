@@ -3008,3 +3008,182 @@ java.lang.ClassCastException: class org.eclipse.jdt.internal.compiler.lookup.Bin
 	at org.eclipse.jdt.internal.ui.viewsupport.SelectionListenerWithASTManager$PartListenerGroup.calculateASTandInform(SelectionListenerWithASTManager.java:166)
 	at org.eclipse.jdt.internal.ui.viewsupport.SelectionListenerWithASTManager$PartListenerGroup$1.run(SelectionListenerWithASTManager.java:151)
 	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+
+!ENTRY org.eclipse.jdt.core 4 4 2023-09-05 22:14:27.883
+!MESSAGE Exception occurred during problem detection:
+----------------------------------- SOURCE BEGIN -------------------------------------
+package com.alura.hotel.jdbcdao;
+
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.alura.hotel.jdbcmodelo.Huesped;
+
+public class HuespedDao {
+	final private Connection con;
+
+	public HuespedDao(Connection con) {
+		this.con = con;
+	}
+
+	public List<Huesped> buscar() {
+		List<Huesped> resultado = new ArrayList<>();
+		String sql = "Select id,nombre,apellido,fechanacimiento,nacionalidad,telefono,reserva_id from huespedes";
+		try {
+			final PreparedStatement statement = con.prepareStatement(sql);
+			try (statement) {
+				statement.execute();
+				final ResultSet result = statement.getResultSet();
+				try (result) {
+					while (result.next()) {
+						resultado.add(new Huesped(result.getInt("id"), result.getString("nombre"),
+								result.getString("apellido"), result.getDate("fechanacimiento"),
+								result.getString("nacionalidad"), result.getLong("telefono"),
+								result.getInt("reserva_id")));
+					}
+				}
+			}
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		return resultado;
+
+	}
+
+	public void guardar(Huesped nuevoH) {
+
+		try {
+			String sql = "insert into huespedes(nombre,apellido,fechanacimiento,nacionalidad,telefono,reserva_id)\r\n"
+					+ "values(?,?,?,?,?,?)";
+			try (PreparedStatement statement = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+				statement.setString(1, nuevoH.getNombre());
+				statement.setString(2, nuevoH.getApellido());
+				statement.setDate(3, nuevoH.getFechaNacimiento());
+				statement.setString(4, nuevoH.getNacionalidad());
+				statement.setLong(5, nuevoH.getTelefono());
+				statement.setInt(6, nuevoH.getReservaID());
+				statement.execute();
+
+				try (ResultSet result = statement.getGeneratedKeys()) {
+					while (result.next()) {
+						nuevoH.setId(result.getInt(1));
+					}
+				}
+			}
+		} catch (SQLException e) {
+			throw new RuntimeException("Error while guardando huesped: " + e.getMessage(), e);
+		}
+	}
+
+	public void eliminar(int idhuesped) {
+		try {
+			String sql = "Delete from huespedes where id=?";
+			try (PreparedStatement statement = con.prepareStatement(sql)) {
+				statement.setInt(1, idhuesped);
+				statement.execute();
+			}
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+
+	}
+
+	public void actualizar(int idhuesped, String nombrehuesped, String apellidoHuesped, Date fechaNacimiento,
+			String nacionalidadHuesped, Long telefonoHuesped, int id_reserva) {
+		try {
+			String sql = "Update huespedes set nombre=?,apellido=?,fechanacimiento=?,nacionalidad=?,telefono=?,reserva_id=? where id=?";
+		try(PreparedStatement){
+			
+		}
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+
+	}
+
+}
+
+----------------------------------- SOURCE END -------------------------------------
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.jdt.ui 4 2 2023-09-05 22:14:27.884
+!MESSAGE Problems occurred when invoking code from plug-in: "org.eclipse.jdt.ui".
+!STACK 1
+Java Model Exception: java.lang.ClassCastException
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder.process(CompilationUnitProblemFinder.java:326)
+	at org.eclipse.jdt.internal.core.CompilationUnit.buildStructure(CompilationUnit.java:193)
+	at org.eclipse.jdt.internal.core.Openable.generateInfos(Openable.java:266)
+	at org.eclipse.jdt.internal.core.JavaElement.openWhenClosed(JavaElement.java:597)
+	at org.eclipse.jdt.internal.core.CompilationUnit.makeConsistent(CompilationUnit.java:1148)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:173)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:740)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:806)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1325)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:132)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:94)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:91)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:158)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:94)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.reconcile(JavaCompositeReconcilingStrategy.java:107)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:78)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:207)
+Caused by: java.lang.ClassCastException
+Caused by: java.lang.ClassCastException
+!SUBENTRY 1 org.eclipse.jdt.core 4 1005 2023-09-05 22:14:27.884
+!MESSAGE java.lang.ClassCastException
+!STACK 0
+java.lang.ClassCastException
+!SUBENTRY 1 org.eclipse.jdt.core 4 1005 2023-09-05 22:14:27.884
+!MESSAGE java.lang.ClassCastException
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.jdt.ui 4 0 2023-09-05 22:14:27.885
+!MESSAGE Error in JDT Core during reconcile
+!STACK 1
+Java Model Exception: java.lang.ClassCastException
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder.process(CompilationUnitProblemFinder.java:326)
+	at org.eclipse.jdt.internal.core.CompilationUnit.buildStructure(CompilationUnit.java:193)
+	at org.eclipse.jdt.internal.core.Openable.generateInfos(Openable.java:266)
+	at org.eclipse.jdt.internal.core.JavaElement.openWhenClosed(JavaElement.java:597)
+	at org.eclipse.jdt.internal.core.CompilationUnit.makeConsistent(CompilationUnit.java:1148)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:173)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:740)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:806)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1325)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:132)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:94)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:91)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:158)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:94)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.reconcile(JavaCompositeReconcilingStrategy.java:107)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:78)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:207)
+Caused by: java.lang.ClassCastException
+Caused by: java.lang.ClassCastException
+!SUBENTRY 1 org.eclipse.jdt.core 4 1005 2023-09-05 22:14:27.885
+!MESSAGE java.lang.ClassCastException
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.jdt.core.manipulation 4 2 2023-09-05 22:14:27.974
+!MESSAGE Problems occurred when invoking code from plug-in: "org.eclipse.jdt.core.manipulation".
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.jdt.core.manipulation 4 0 2023-09-05 22:14:27.974
+!MESSAGE Error in JDT Core during AST creation
+!STACK 0
+java.lang.ClassCastException

@@ -1,0 +1,31 @@
+package com.alura.hotel.jdbccontroler;
+
+import java.sql.Date;
+import java.util.List;
+
+import com.alura.hotel.jdbcdao.ReservaDao;
+import com.alura.hotel.jdbcfactory.ConexionFactory;
+import com.alura.hotel.jdbcmodelo.Reserva;
+
+public class ReservaControler {
+	private ReservaDao reservadao;
+
+	public ReservaControler() {
+		ConexionFactory con = new ConexionFactory();
+		this.reservadao = new ReservaDao(con.recuperaConexion());
+	}
+	public List<Reserva> buscar(){
+		return reservadao.buscar();
+	}
+	public void guardar(Reserva reserva) {
+		this.reservadao.guardar(reserva);
+	}
+	public void eliminar(int idReserva) {
+		this.reservadao.eliminar(idReserva);
+		
+	}
+	public void actualizar(int idReserva, Date fechaEReserva, Date fechaSReserva, Float valorReserva,
+			String formaPagoReserva) {
+		this.reservadao.actualizar(idReserva, fechaEReserva, fechaSReserva, valorReserva, formaPagoReserva);
+	}
+}
