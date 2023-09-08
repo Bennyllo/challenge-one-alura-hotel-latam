@@ -1,0 +1,101 @@
+package com.alura.hotel.jdbcdao;
+
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.List;
+
+import javax.swing.JOptionPane;
+
+import java.util.ArrayList;
+
+import com.alura.hotel.jdbcmodelo.Reserva;
+
+public class ReservaDao {
+	final private Connection con;
+
+	public ReservaDao(Connection con) {
+		this.con = con;
+	}
+
+	public List<Reserva> buscar() {
+		List<Reserva> resultado = new ArrayList<>();
+		String sql = "Select idreserva,fechaentrada,fechasalida,valor,formapago from reservas";
+		try {
+			final PreparedStatement statement = con.prepareStatement(sql);
+			try (statement) {
+				statement.execute();
+				final ResultSet result = statement.getResultSet();
+				try (result) {
+					while (result.next()) {
+						resultado.add(new Reserva(result.getInt("idreserva"), result.getDate("fechaentrada"),
+								result.getDate("fechasalida"), result.getFloat("valor"),
+								result.getString("formapago")));
+					}
+				}
+			}
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		return resultado;
+
+	}
+
+	public void guardar(Reserva reserva) {
+		try {
+			String sql = "insert into reservas(fechaentrada, fechasalida, formapago) values(?,?,?)";
+			try (PreparedStatement statement = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+				statement.setDate(1, reserva.getFechaE());
+				statement.setDate(2, reserva.getFechaS());
+				statement.setString(3, reserva.getFormaPago());
+				statement.execute();
+				
+
+				try (ResultSet result = statement.getGeneratedKeys()) {
+					while (result.next()) {
+						reserva.setId(result.getInt(1));
+					}
+					JOptionPane.showMessageDialog(null,"Se guardo la reserva numero: ."+reserva.getId());
+				
+				}
+			}
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public void eliminar(int idReserva) {
+		try {
+			String sql = "Delete from reservas where idreserva=?";
+			try (PreparedStatement statement = con.prepareStatement(sql)) {
+				statement.setInt(1, idReserva);
+				statement.execute();
+
+			}
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+
+	}
+
+	public void actualizar(int idReserva, Date fechaEReserva, Date fechaSReserva, String formaPagoReserva) {
+		try {
+			String sql = "Update reservas set fechaentrada=?,fechasalida=?,formapago=? where reserva_id=?";
+			try (PreparedStatement statement = con.prepareStatement(sql)) {
+				statement.setDate(1, fechaEReserva);
+				statement.setDate(2, fechaSReserva);
+				statement.setString(3, formaPagoReserva);
+				statement.setInt(4, idReserva);
+				statement.execute();
+			}
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+
+	}
+
+}

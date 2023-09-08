@@ -1,0 +1,38 @@
+package com.alura.hotel.jdbccontroler;
+
+import java.sql.Connection;
+import java.sql.Date;
+import java.util.List;
+
+import com.alura.hotel.jdbcdao.HuespedDao;
+import com.alura.hotel.jdbcfactory.ConexionFactory;
+import com.alura.hotel.jdbcmodelo.Huesped;
+
+public class HuespedControler {
+	private HuespedDao huespedDAO;
+
+	public HuespedControler() {
+		Connection con = new ConexionFactory().recuperaConexion();
+		this.huespedDAO=new HuespedDao(con);
+	}
+	
+	public List<Huesped> buscar(){
+		return this.huespedDAO.buscar();
+	}
+
+	public void guardar(Huesped nuevoH) {
+		this.huespedDAO.guardar(nuevoH);
+	}
+
+
+	public void eliminar(int idhuesped) {
+		this.huespedDAO.eliminar(idhuesped);
+		
+	}
+
+	public void actualizar(int idhuesped, String nombrehuesped, String apellidoHuesped, Date fechaNacimiento,
+			String nacionalidadHuesped, Long telefonoHuesped, int id_reserva) {
+		this.huespedDAO.actualizar(idhuesped, nombrehuesped, apellidoHuesped, fechaNacimiento, nacionalidadHuesped,
+							telefonoHuesped, id_reserva);
+	}
+}

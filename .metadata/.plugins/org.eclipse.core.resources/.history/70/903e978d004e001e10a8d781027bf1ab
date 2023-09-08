@@ -1,0 +1,145 @@
+package com.alura.hotel.jdbcdao;
+
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JOptionPane;
+
+import com.alura.hotel.jdbcmodelo.Huesped;
+
+public class HuespedDao {
+	final private Connection con;
+
+	public HuespedDao(Connection con) {
+		this.con = con;
+	}
+
+	public List<Huesped> buscar() {
+		List<Huesped> resultado = new ArrayList<>();
+		String sql = "Select id,nombre,apellido,fechanacimiento,nacionalidad,telefono,reserva_id from huespedes";
+		try {
+			final PreparedStatement statement = con.prepareStatement(sql);
+			try (statement) {
+				statement.execute();
+				final ResultSet result = statement.getResultSet();
+				try (result) {
+					while (result.next()) {
+						resultado.add(new Huesped(result.getInt("id"), result.getString("nombre"),
+								result.getString("apellido"), result.getDate("fechanacimiento"),
+								result.getString("nacionalidad"), result.getLong("telefono"),
+								result.getInt("reserva_id")));
+					}
+				}
+			}
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					"Ocurrio un error al procesar tu solicitud verifica que todos los datos sean correctos error:"
+							+ e.getMessage());
+
+		}
+		return resultado;
+
+	}
+
+	public void guardar(Huesped nuevoH) {
+
+		try {
+			String sql = "insert into huespedes(nombre,apellido,fechanacimiento,nacionalidad,telefono,reserva_id)\r\n"
+					+ "values(?,?,?,?,?,?)";
+			try (PreparedStatement statement = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+				statement.setString(1, nuevoH.getNombre());
+				statement.setString(2, nuevoH.getApellido());
+				statement.setDate(3, nuevoH.getFechaNacimiento());
+				statement.setString(4, nuevoH.getNacionalidad());
+				statement.setLong(5, nuevoH.getTelefono());
+				statement.setInt(6, nuevoH.getReservaID());
+				statement.execute();
+
+				try (ResultSet result = statement.getGeneratedKeys()) {
+					while (result.next()) {
+						nuevoH.setId(result.getInt(1));
+					}
+					JOptionPane.showMessageDialog(null, "Se guardo el huesped con el id: " + nuevoH.getId());
+				}
+			}
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					"Ocurrio un error al procesar tu solicitud verifica que todos los datos sean correctos error:"
+							+ e.getMessage());
+
+		}
+	}
+
+	public void eliminar(int idhuesped) {
+		try {
+			String sql = "Delete from huespedes where id=?";
+			try (PreparedStatement statement = con.prepareStatement(sql)) {
+				statement.setInt(1, idhuesped);
+				statement.execute();
+			}
+
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					"Ocurrio un error al procesar tu solicitud verifica que todos los datos sean correctos error:"
+							+ e.getMessage());
+
+		}
+
+	}
+
+	public void actualizar(int idhuesped, String nombrehuesped, String apellidoHuesped, Date fechaNacimiento,
+			String nacionalidadHuesped, Long telefonoHuesped, int id_reserva) {
+		try {
+			String sql = "Update huespedes set nombre=?,apellido=?,fechanacimiento=?,nacionalidad=?,telefono=?,reserva_id=? where id=?";
+			try (PreparedStatement statement = con.prepareStatement(sql)) {
+				statement.setString(1, nombrehuesped);
+				statement.setString(2, apellidoHuesped);
+				statement.setDate(3, fechaNacimiento);
+				statement.setString(4, nacionalidadHuesped);
+				statement.setLong(5, telefonoHuesped);
+				statement.setInt(6, id_reserva);
+				statement.setInt(7, idhuesped);
+				statement.execute();
+
+			}
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					"Ocurrio un error al procesar tu solicitud verifica que todos los datos sean correctos error:"
+							+ e.getMessage());
+
+		}
+
+	}
+
+	public List<Huesped> buscarPorApellido(String apellido) {
+		List<Huesped> resultado = new ArrayList<>();
+		String sql = "Select id,nombre,apellido,fechanacimiento,nacionalidad,telefono,reserva_id from huespedes where apellido=?";
+		try {
+			try (PreparedStatement statement = con.prepareStatement(sql) {
+				statement.execute();
+				final ResultSet result = statement.getResultSet();
+				try (result) {
+					while (result.next()) {
+						resultado.add(new Huesped(result.getInt("id"), result.getString("nombre"),
+								result.getString("apellido"), result.getDate("fechanacimiento"),
+								result.getString("nacionalidad"), result.getLong("telefono"),
+								result.getInt("reserva_id")));
+					}
+				}
+			}
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,
+					"Ocurrio un error al procesar tu solicitud verifica que todos los datos sean correctos error:"
+							+ e.getMessage());
+
+		}
+		return resultado;
+	}
+
+}
